@@ -1,11 +1,10 @@
-import numpy as np
 import matplotlib.pyplot as plt
 
 def f(x):
-    return (x**2) + (4*x) + 4
+    return (x**2) - (4*x) + 4
 
 def df(x):
-    return (2*x) + 4
+    return (2*x) - 4
 
 def gradientDecent(starting_point, learning_rate, iterations):
     lX = []
@@ -13,7 +12,7 @@ def gradientDecent(starting_point, learning_rate, iterations):
     lf = []
     x = starting_point
     for i in range(iterations):
-        lY.append(f(x))
+        lY.append(x)
         lX.append(i)
         x = x - learning_rate*df(x)
     return x, lX, lY

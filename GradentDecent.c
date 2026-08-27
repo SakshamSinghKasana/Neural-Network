@@ -1,11 +1,11 @@
 #include <stdio.h>
 
 float f(float x){
-  return (x*x)+(6*x)+6;
+  return (x*x)-(6*x)+6;
 }
 
 float df(float x){
-  return (2*x)+6;
+  return (2*x)-6;
 }
 
 float GradentDecent(float minimum,float LearningRate,float iterations){
