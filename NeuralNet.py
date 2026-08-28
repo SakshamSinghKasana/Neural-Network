@@ -1,34 +1,49 @@
 import math
+# import tensorflow as tf
 
 class Neuron:
-    def __init__(self, inputX, W_list):
-        self.inputX = inputX
-        self.W_list = W_list
+    def __init__(self, WeightList, InputList):
+        self.WeightList = WeightList
+        self.InputList = InputList
+        self.z_sum = 0
+        self.output = 0
+        self.error = 0
 
     def z(self):
-        total = 0
-        for i in range(len(self.W_list)):
-            total += self.W_list[i] * self.inputX[i]
-        return total
+        sum = 0
+        for i in range(len(self.WeightList)):
+            sum += self.WeightList[i]*self.InputList[i]
+        self.z_sum = sum
 
     def a(self):
-        return 1 / (1 + (math.e**(-self.z())))
+        sigmoid = 1/(1+(math.e*(-(self.z_sum))))
+        self.output = sigmoid
 
-def main():
-    inputX = [1, 2, 3, 4]
-    W1 = [
-            [1, 2, 3, 4],
-            [1, 2, 3, 4]
-    ]
-    W2 = [1,2]
-    l11 = Neuron(inputX, W1[0]).a()
-    l12 = Neuron(inputX, W1[1]).a()
+    def Error(self, final):
+        error = ((self.output-final)**2)/2
+        self.error = error
 
-    l1 = [l11, l12]
-    l21 = Neuron(l1,W2).a()
-    output = [l21]
+    def df(self):
+        return self.output*(1-self.output)
 
-    print(output)
+    def update_weight(self,Expected,LearningRate):
+        for i in range(len(self.WeightList)):
+            gradient = (self.output - Expected)*self.df()*self.InputList[i]
+            self.WeightList[i] -= LearningRate*gradient
 
-if __name__ == "__main__":
-    main()
+
+
+inputs = [1.0, 2.0, 3.0]
+weights = [0.5, -0.5, 0.3]
+neuron = Neuron(weights, inputs)
+
+# Forward pass
+neuron.z()
+neuron.a()
+
+# Backpropagation step
+expected = 1
+neuron.Error(expected)
+neuron.update_weight(0.1, expected)
+
+print("Updated weights:", neuron.WeightList)
